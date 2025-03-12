@@ -1,7 +1,4 @@
-AM_CPPFLAGS = \
-	-I$(srcdir)/.. -I$(builddir)/.. \
-	-I$(srcdir)/../libcommon -I$(builddir)/../libcommon \
-	-D_GNU_SOURCE -DLOCALEDIR=\"$(localedir)\"
+include $(top_srcdir)/Makefile.common
 
 EXTRA_DIST = README.vlock vlock.pamd
 

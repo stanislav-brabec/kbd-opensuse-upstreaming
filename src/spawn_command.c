@@ -23,20 +23,27 @@
 
 #include "libcommon.h"
 
+#ifdef SPAWN_CONSOLE
+  #define COMMAND "openvt -s -l bash"
+#elif  SPAWN_LOGIN
+  #define COMMAND "openvt -s -l -- login -h spawn"
+#else
+  #error "-DSPAWN_CONSOLE or -DSPAWN_LOGIN must be specified"
+#endif
+
 static void
-sighup(int n __attribute__((unused)))
+sighup(int n KBD_ATTR_UNUSED)
 {
-	if (system("openvt -s -l bash") == -1) {
+	if (system(COMMAND) == -1) {
 		kbd_error(EXIT_FAILURE, errno, "system");
 	}
 	signal(SIGHUP, sighup);
 }
 
-int main(int argc __attribute__((unused)), char *argv[])
+int main(int argc KBD_ATTR_UNUSED, char *argv[] KBD_ATTR_UNUSED)
 {
 	int fd;
 
-	set_progname(argv[0]);
 	setuplocale();
 
 	fd = open("/dev/tty0", 0);
